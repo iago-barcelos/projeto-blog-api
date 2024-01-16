@@ -9,7 +9,8 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      display_name: {
+      displayName: {
+        field: 'display_name',
         type: Sequelize.STRING,
         allowNull: false,
       },

@@ -12,8 +12,7 @@ const validateToken = (req, res, next) => {
     const verifyToken = jwt.verify(token, secret);
 
     res.locals.user = {
-      id: verifyToken.sub,
-      role: verifyToken.role,
+      id: verifyToken.data.id,
     };
   } catch (error) {
     console.error(error);

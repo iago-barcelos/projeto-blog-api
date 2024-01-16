@@ -1,17 +1,10 @@
-const jwt = require('jsonwebtoken');
+const signToken = require('../utils/signToken');
 
-const findUserByEmail = (req, res) => {
+const logging = (req, res) => {
   try {
-    const { email } = req.body;
+    const { id, email } = req.user;
     
-    const jwtEnv = {
-      expiresIn: '7d',
-      algorithm: 'HS256',
-    };
-
-    const secret = process.env.JWT_SECRET;
-  
-    const token = jwt.sign({ data: email }, secret, jwtEnv);
+    const token = signToken({ id, email });
   
     return res.status(200).json({ token });
   } catch (error) {
@@ -19,6 +12,4 @@ const findUserByEmail = (req, res) => {
   }
 };
 
-module.exports = {
-  findUserByEmail,
-};
+module.exports = logging;
