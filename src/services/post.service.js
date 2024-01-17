@@ -1,17 +1,7 @@
 const { BlogPost, Category, PostCategory, User } = require('../models');
 
 const createPost = async (title, content, categoryIds, id) => {
-  const validateCategoryId = await categoryIds.map((category) => Category.findByPk(category));
-
-  const promises = await Promise.all(validateCategoryId);
-
-  const findError = promises.some((category) => category === null);
-
-  if (findError) return { message: 'one or more "categoryIds" not found' };
-
   const newPost = await BlogPost.create({ title, content, userId: id });
-
-  console.log(newPost);
 
   await PostCategory.bulkCreate(categoryIds
     .map((categoryId) => ({ postId: newPost.dataValues.id, categoryId })));
@@ -50,11 +40,20 @@ const getPostById = async (id) => {
 
   if (!postById) return { status: 404, data: { message: 'Post does not exist' } };
 
+  /* console.log('post pelo id:', postById); */
+
   return { status: 200, data: postById };
+};
+
+const updatePost = async (id, title, content) => {
+  await BlogPost.update({ title, content }, { where: { id } });
+  const postById = await getPostById(id);
+  return postById.data;
 };
 
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
+  updatePost,
 };

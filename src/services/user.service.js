@@ -12,6 +12,7 @@ const getAllUsers = () => {
 
 const getUserById = async (id) => {
   const user = await User.findOne({ where: { id }, attributes: { exclude: 'password' } });
+  console.log('usuário pelo id:', user);
 
   if (!user) {
     return { status: 404, data: { message: 'User does not exist' } };
