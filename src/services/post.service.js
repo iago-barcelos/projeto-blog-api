@@ -21,13 +21,8 @@ const createPost = async (title, content, categoryIds, id) => {
 
 const getAllPosts = () => BlogPost.findAll({
   include: [
-    {
-      model: User,
-      as: 'user',
-      attributes: { exclude: ['password'] },
-    },
-    {
-      model: Category,
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    { model: Category, 
       as: 'categories',
       through: { 
         attributes: [],
@@ -39,7 +34,27 @@ const getAllPosts = () => BlogPost.findAll({
   attributes: { exclude: ['user_id'] },
 });
 
+const getPostById = async (id) => {
+  const postById = await BlogPost.findByPk(id, { include: [
+    { model: User, 
+      as: 'user',
+      attributes: { exclude: ['password'] },
+    },
+    { model: Category,
+      as: 'categories',
+      through: { model: PostCategory, as: 'posts_categories', attributes: [],
+      },
+    }],
+  attributes: { exclude: ['user_id'] },
+  });
+
+  if (!postById) return { status: 404, data: { message: 'Post does not exist' } };
+
+  return { status: 200, data: postById };
+};
+
 module.exports = {
   createPost,
   getAllPosts,
+  getPostById,
 };
