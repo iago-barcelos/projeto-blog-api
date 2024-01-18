@@ -2,7 +2,6 @@ const { postService } = require('../services');
 
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
-
   const { id } = res.locals.user;
 
   const newPost = await postService.createPost(title, content, categoryIds, id);
@@ -46,9 +45,16 @@ const updatePost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  const deletedPost = await postService.deletePost(id);
+  return res.status(204).json(deletedPost);
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
   updatePost,
+  deletePost,
 };

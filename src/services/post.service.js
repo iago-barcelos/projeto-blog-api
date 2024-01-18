@@ -40,8 +40,6 @@ const getPostById = async (id) => {
 
   if (!postById) return { status: 404, data: { message: 'Post does not exist' } };
 
-  /* console.log('post pelo id:', postById); */
-
   return { status: 200, data: postById };
 };
 
@@ -51,9 +49,12 @@ const updatePost = async (id, title, content) => {
   return postById.data;
 };
 
+const deletePost = (id) => BlogPost.destroy({ where: { id } });
+
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
   updatePost,
+  deletePost,
 };
